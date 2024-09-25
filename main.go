@@ -7,35 +7,38 @@ import (
 	"strings"
 )
 
-
 type StackA struct {
-    items []int
+	items []int
 }
 
 type StackB struct {
-    items []int
+	items []int
 }
 
 func (s *StackA) Push(data int) {
-    s.items = append(s.items, data)
+	s.items = append(s.items, data)
 }
 
-func (s *StackA) Pop() {
-    if s.IsEmpty() {
-        return
-    }
-    s.items = s.items[:len(s.items)-1]
+func (s *StackA) Pop() int {
+	if s.IsEmpty() {
+		return 0
+	}
+	n := s.items[len(s.items)-1]
+	s.items = s.items[:len(s.items)-1]
+	return n
 }
 
 func (s *StackB) Push(data int) {
-    s.items = append(s.items, data)
+	s.items = append(s.items, data)
 }
 
-func (s *StackB) Pop() {
-    if s.IsEmpty() {
-        return
-    }
-    s.items = s.items[:len(s.items)-1]
+func (s *StackB) Pop() int {
+	if s.IsEmpty() {
+		return 0
+	}
+	n := s.items[len(s.items)-1]
+	s.items = s.items[:len(s.items)-1]
+	return n
 }
 
 func (s *StackA) IsEmpty() bool {
@@ -62,8 +65,11 @@ func isSorted(s []int) bool {
 	}
 	return true
 }
-func main()  {
+
+func main() {
 	StackA := StackA{}
+	StackB := StackB{}
+	var tracker []string
 	num := os.Args[1]
 	nums := strings.Split(num, " ")
 	for _, v := range nums {
@@ -73,6 +79,13 @@ func main()  {
 			return
 		}
 		StackA.Push(n)
-	} 
-	fmt.Println(StackA.items)
+	}
+	for len(StackA.items) > 3 {
+		tracker = append(tracker, "pb")
+		n := StackA.Pop()
+		StackB.Push(n)
+	}
+	fmt.Println("stackA: ",StackA.items)
+	fmt.Println("stackB: ",StackB.items)
+	fmt.Println(tracker)
 }
